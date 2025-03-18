@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 from anus.core.orchestrator import AgentOrchestrator
 
 # Configuratie van de pagina
@@ -39,65 +40,85 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Header
-st.title("ANUS AI")
-st.subheader("Autonomous Networked Utility System")
+def main():
+    # Header
+    st.title("ANUS AI")
+    st.subheader("Autonomous Networked Utility System")
 
-# Initialiseer sessie state
-if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = []
+    # Initialiseer sessie state
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
 
-# Initialiseer de orchestrator
-@st.cache_resource
-def get_orchestrator():
-    return AgentOrchestrator()
+    # Initialiseer de orchestrator
+    @st.cache_resource
+    def get_orchestrator():
+        return AgentOrchestrator()
 
-orchestrator = get_orchestrator()
+    orchestrator = get_orchestrator()
 
-# Chat interface
-st.markdown("### Chat met ANUS")
+    # Chat interface
+    st.markdown("### Chat met ANUS")
 
-# Toon chat geschiedenis
-for message in st.session_state.chat_history:
-    with st.container():
-        if message["role"] == "user":
-            st.markdown(f"**You:** {message['content']}")
-        else:
-            st.markdown(f"**ANUS:** {message['content']}")
+    # Toon chat geschiedenis
+    for message in st.session_state.chat_history:
+        with st.container():
+            if message["role"] == "user":
+                st.markdown(f"**You:** {message['content']}")
+            else:
+                st.markdown(f"**ANUS:** {message['content']}")
 
-# Input veld
-with st.form(key="chat_form"):
-    user_input = st.text_area("Typ je vraag of opdracht:", height=100)
-    mode = st.selectbox("Mode:", ["single", "multi"], index=0)
-    submit_button = st.form_submit_button("Verstuur")
+    # Input veld
+    with st.form(key="chat_form"):
+        user_input = st.text_area("Typ je vraag of opdracht:", height=100)
+        mode = st.selectbox("Mode:", ["single", "multi"], index=0)
+        submit_button = st.form_submit_button("Verstuur")
 
-    if submit_button and user_input:
-        # Voeg user input toe aan geschiedenis
-        st.session_state.chat_history.append({
-            "role": "user",
-            "content": user_input
-        })
-        
-        # Verwerk de vraag
-        with st.spinner("ANUS denkt na..."):
-            try:
-                result = orchestrator.execute_task(user_input, mode=mode)
-                
-                # Voeg antwoord toe aan geschiedenis
-                st.session_state.chat_history.append({
-                    "role": "assistant",
-                    "content": result
-                })
-                
-                # Toon het nieuwe antwoord
-                st.markdown(f"**ANUS:** {result}")
-            except Exception as e:
-                st.error(f"Er is een fout opgetreden: {str(e)}")
+        if submit_button and user_input:
+            # Voeg user input toe aan geschiedenis
+            st.session_state.chat_history.append({
+                "role": "user",
+                "content": user_input
+            })
+            
+            # Verwerk de vraag
+            with st.spinner("ANUS denkt na..."):
+                try:
+                    result = orchestrator.execute_task(user_input, mode=mode)
+                    
+                    # Voeg antwoord toe aan geschiedenis
+                    st.session_state.chat_history.append({
+                        "role": "assistant",
+                        "content": result
+                    })
+                    
+                    # Toon het nieuwe antwoord
+                    st.markdown(f"**ANUS:** {result}")
+                except Exception as e:
+                    st.error(f"Er is een fout opgetreden: {str(e)}")
 
-# Footer
-st.markdown("---")
-st.markdown(
-    "ANUS is een AI framework dat gebruik maakt van geavanceerde technieken "
-    "om je te helpen met diverse taken. Gebruik de chat hierboven om vragen "
-    "te stellen of opdrachten te geven."
-) 
+    # Footer
+    st.markdown("---")
+    st.markdown(
+        "ANUS is een AI framework dat gebruik maakt van geavanceerde technieken "
+        "om je te helpen met diverse taken. Gebruik de chat hierboven om vragen "
+        "te stellen of opdrachten te geven."
+    )
+
+if __name__ == "__main__":
+    # Haal de poort op uit de omgevingsvariabele of gebruik de standaard poort
+    port = int(os.environ.get("PORT", 10000))
+    
+    # Start de Streamlit app met de juiste configuratie
+    import streamlit.web.bootstrap as bootstrap
+    bootstrap.run(
+        main,
+        "",
+        args=[
+            "",
+            "--server.address=0.0.0.0",
+            f"--server.port={port}",
+            "--server.headless=true",
+            "--browser.serverAddress=0.0.0.0",
+        ],
+        flag_options={},
+    ) 
