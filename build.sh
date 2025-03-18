@@ -4,11 +4,14 @@
 # Exit on error
 set -o errexit
 
-# Install Python dependencies
+# Verwijder onnodige dependencies
+pip uninstall -y playwright streamlit langchain openai anthropic
+
+# Installeer alleen de core dependencies
 pip install -r requirements.txt
 
-# Install the package
+# Installeer het package
 pip install -e .
 
-# Make the script executable
+# Maak het script uitvoerbaar
 chmod +x build.sh 

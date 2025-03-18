@@ -1,4 +1,5 @@
 import os
+import socket
 import uvicorn
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
@@ -23,6 +24,11 @@ app.add_middleware(
 
 # Creëer een Orchestrator instantie
 orchestrator = AgentOrchestrator()
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 # Root endpoint
 @app.get("/", response_class=HTMLResponse)
@@ -164,10 +170,24 @@ async def execute(request: Request):
     except Exception as e:
         return {"error": str(e)}
 
+def is_port_available(port: int) -> bool:
+    """Check of een poort beschikbaar is."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.bind(('0.0.0.0', port))
+            return True
+        except socket.error:
+            return False
+
 # Start de server als dit script direct wordt uitgevoerd
 if __name__ == "__main__":
     # Krijg de poort uit de omgevingsvariabele of gebruik standaard 10000
     port = int(os.environ.get("PORT", 10000))
+    
+    # Check of de poort beschikbaar is
+    if not is_port_available(port):
+        print(f"Error: Port {port} is niet beschikbaar")
+        exit(1)
     
     # Start de uvicorn server met de juiste configuratie
     uvicorn.run(
