@@ -3,7 +3,9 @@ services:
     name: anus-ai
     env: python
     buildCommand: ./build.sh
-    startCommand: python -m anus.main
+    startCommand: python -m anus.main --web
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0 
+        value: 3.11.0
+      - key: PORT
+        value: 8000 

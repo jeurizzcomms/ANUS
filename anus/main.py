@@ -7,6 +7,7 @@ import argparse
 import sys
 from anus.core.orchestrator import AgentOrchestrator
 from anus.ui.cli import CLI
+from anus.web import start_server
 
 def main():
     """Main entry point for the Anus AI agent"""
@@ -15,8 +16,15 @@ def main():
     parser.add_argument("--mode", type=str, default="single", choices=["single", "multi"], help="Agent mode")
     parser.add_argument("--task", type=str, help="Task description")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+    parser.add_argument("--web", action="store_true", help="Start web interface")
+    parser.add_argument("--port", type=int, help="Port for web interface (default: 8000)")
     
     args = parser.parse_args()
+    
+    # Start web interface if requested
+    if args.web:
+        start_server(port=args.port)
+        return
     
     # Initialize the CLI
     cli = CLI(verbose=args.verbose)
