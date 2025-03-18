@@ -3,7 +3,7 @@ services:
     name: anus-ai
     env: python
     buildCommand: pip install --upgrade pip && ./build.sh
-    startCommand: python -m anus.server
+    startCommand: python -m anus.minimal_server
     healthCheckPath: /health
     autoDeploy: false
     envVars:
