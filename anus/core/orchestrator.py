@@ -9,10 +9,15 @@ Behind every successful ANUS is a well-designed Orchestrator.
 
 from typing import Dict, List, Any, Optional, Union
 import logging
-import yaml
 import os
 import time
 import random
+
+# Check required dependencies
+try:
+    import yaml
+except ImportError:
+    raise ImportError("PyYAML is required. Please install it with: pip install PyYAML")
 
 from anus.core.agent import BaseAgent, HybridAgent
 from anus.core.memory import ShortTermMemory, LongTermMemory
