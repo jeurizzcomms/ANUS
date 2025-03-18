@@ -1,23 +1,14 @@
 services:
   - type: web
-    name: anus-ai
+    name: anus
     env: python
-    buildCommand: pip install --upgrade pip && ./build.sh
-    startCommand: python -m anus.minimal_server
-    healthCheckPath: /health
-    autoDeploy: false
+    buildCommand: pip install -r requirements.txt
+    startCommand: python minimal_server.py
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: PORT
-        value: 10000
+        value: 3.11.11
       - key: PYTHONUNBUFFERED
         value: 1
-    healthCheckTimeout: 100
-    buildFilter:
-      paths:
-        - "anus/**"
-        - "requirements.txt"
-        - "build.sh"
-        - "render.yaml"
-        - "pyproject.toml" 
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health 
