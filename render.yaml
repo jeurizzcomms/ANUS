@@ -3,7 +3,7 @@ services:
     name: anus-ai
     env: python
     buildCommand: ./build.sh
-    startCommand: python -m anus.main --web
+    startCommand: streamlit run anus/frontend.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
