@@ -3,7 +3,7 @@ services:
     name: anus-ai
     env: python
     buildCommand: ./build.sh
-    startCommand: streamlit run anus/frontend.py --server.address 0.0.0.0 --server.port $PORT
+    startCommand: python -c "import os; os.environ['STREAMLIT_SERVER_PORT'] = os.environ.get('PORT', '10000'); os.environ['STREAMLIT_SERVER_ADDRESS'] = '0.0.0.0'; os.environ['STREAMLIT_SERVER_HEADLESS'] = 'true'; import streamlit.web.cli as cli; cli._main_run_clr(['streamlit', 'run', 'anus/frontend.py', '--server.enableCORS=false', '--server.enableXsrfProtection=false'])"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0

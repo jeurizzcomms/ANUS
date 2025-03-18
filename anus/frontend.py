@@ -2,45 +2,45 @@ import streamlit as st
 import os
 from anus.core.orchestrator import AgentOrchestrator
 
-# Configuratie van de pagina
-st.set_page_config(
-    page_title="ANUS - Autonomous Networked Utility System",
-    page_icon="🤖",
-    layout="centered"
-)
-
-# Custom CSS voor Stripe-achtige styling
-st.markdown("""
-<style>
-    .stTextInput > div > div > input {
-        background-color: #f6f9fc;
-        border: 1px solid #e3e8ee;
-        border-radius: 4px;
-        padding: 12px;
-        font-size: 16px;
-    }
-    .stButton > button {
-        background-color: #635bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 12px 24px;
-        font-weight: 600;
-    }
-    .stButton > button:hover {
-        background-color: #5851db;
-    }
-    .output-container {
-        background-color: #f6f9fc;
-        border: 1px solid #e3e8ee;
-        border-radius: 4px;
-        padding: 20px;
-        margin: 20px 0;
-    }
-</style>
-""", unsafe_allow_html=True)
-
 def main():
+    # Configuratie van de pagina
+    st.set_page_config(
+        page_title="ANUS - Autonomous Networked Utility System",
+        page_icon="🤖",
+        layout="centered"
+    )
+
+    # Custom CSS voor Stripe-achtige styling
+    st.markdown("""
+    <style>
+        .stTextInput > div > div > input {
+            background-color: #f6f9fc;
+            border: 1px solid #e3e8ee;
+            border-radius: 4px;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .stButton > button {
+            background-color: #635bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-weight: 600;
+        }
+        .stButton > button:hover {
+            background-color: #5851db;
+        }
+        .output-container {
+            background-color: #f6f9fc;
+            border: 1px solid #e3e8ee;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
     # Header
     st.title("ANUS AI")
     st.subheader("Autonomous Networked Utility System")
@@ -105,20 +105,4 @@ def main():
     )
 
 if __name__ == "__main__":
-    # Haal de poort op uit de omgevingsvariabele of gebruik de standaard poort
-    port = int(os.environ.get("PORT", 10000))
-    
-    # Start de Streamlit app met de juiste configuratie
-    import streamlit.web.bootstrap as bootstrap
-    bootstrap.run(
-        main,
-        "",
-        args=[
-            "",
-            "--server.address=0.0.0.0",
-            f"--server.port={port}",
-            "--server.headless=true",
-            "--browser.serverAddress=0.0.0.0",
-        ],
-        flag_options={},
-    ) 
+    main() 
